@@ -1,3 +1,7 @@
+library(ggplot2)
+
+sods_data <- read.csv("data/stackoverflow-git-data.csv")
+
 g <- ggplot(
   data = sods_data,
   mapping = aes(x = year, y = percentage)) +
@@ -13,3 +17,17 @@ g <- ggplot(
     y = "Percentage who used git") +
   ylim(c(0,100)) +
   theme_bw()
+
+ggsave(filename = "out/git-usage.png",
+       plot = g,
+       height = 7.4,
+       width = 10.5,
+       units = "cm")
+
+sink(file = "regression-summary.txt")
+summary(lm(percentage ~ year, data = sods_data))
+sink()
+
+sink(file = "out/package-versions.txt")
+sessionInfo()
+sink()
